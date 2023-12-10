@@ -11,7 +11,7 @@
             max = parseFloat(element.getAttribute('max')),
             step = parseFloat(element.getAttribute('step')) || 1,
             oldValue = element.dataset.value || element.defaultValue || 0,
-            newValue = parseFloat(element.value.replace(/\$/, ''));
+            newValue = parseFloat(element.value.replace(/€/, ''));
 
         if (isNaN(parseFloat(newValue))) {
             newValue = oldValue;
@@ -23,6 +23,11 @@
             }
 
             newValue = newValue < min ? min : newValue > max ? max : newValue;
+
+            // Verificação do valor máximo e acionamento do alerta
+            if (newValue >= max && element.id === 'estimated_return') {
+                alert('Você alcançou o valor máximo!');
+            }
         }
 
         element.dataset.value = newValue;
@@ -47,13 +52,13 @@
         }
 
         var principal_dataset = {
-            label: 'Total Principal',
+            label: 'Principal Total',
             backgroundColor: 'rgb(0, 123, 255)',
             data: []
         };
 
         var interest_dataset = {
-            label: "Total Interest",
+            label: "Juro Total",
             backgroundColor: 'rgb(23, 162, 184)',
             data: []
         };
@@ -71,7 +76,7 @@
                 balance = (compound_interest + contribution_interest).toFixed(0);
             }
 
-            future_balance.innerHTML = '$' + balance;
+            future_balance.innerHTML = balance + '€';
             principal_dataset.data.push(principal);
             interest_dataset.data.push(interest);
         }
@@ -91,6 +96,7 @@
         chart.update();
     }
 
+
     initial_deposit.addEventListener('change', function () {
         updateValue(this);
     });
@@ -104,12 +110,12 @@
     });
 
     investment_timespan.addEventListener('change', function () {
-        investment_timespan_text.innerHTML = this.value + ' years';
+        investment_timespan_text.innerHTML = this.value + ' anos';
         updateChart();
     });
 
     investment_timespan.addEventListener('input', function () {
-        investment_timespan_text.innerHTML = this.value + ' years';
+        investment_timespan_text.innerHTML = this.value + ' anos';
     });
 
     var radios = document.querySelectorAll('[name="contribution_period"], [name="compound_period"]');
@@ -144,7 +150,7 @@
                     intersect: false,
                     callbacks: {
                         label: function (tooltipItem, data) {
-                            return data.datasets[tooltipItem.datasetIndex].label + ': $' + tooltipItem.yLabel;
+                            return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + '€';
                         }
                     }
                 },
@@ -161,7 +167,7 @@
                         stacked: true,
                         ticks: {
                             callback: function (value) {
-                                return '$' + value;
+                                return value + '€';
                             }
                         },
                         scaleLabel: {
@@ -172,5 +178,70 @@
                 }
             }
         });
+
+
+    //////////////////CUSTOM CODE//////////////////////
+
+
+    /// Função para redefinir os valores dos campos de entrada para o estado inicial
+    function resetValues() {
+        // Redefine cada campo de entrada para o seu valor inicial
+        document.getElementById('initial_deposit').value = '5000€';
+        document.getElementById('contribution_amount').value = '100€';
+        document.getElementById('estimated_return').value = '5.00%';
+        document.getElementById('investment_timespan').value = '5';
+        investment_timespan_text.innerHTML = '5 anos';
+
+        updateChart(); // Atualiza o gráfico com os valores padrão
+    }
+
+    // Adiciona um event listener ao botão de reset
+    document.getElementById('reset').addEventListener('click', resetValues);
+
+
+
+    /// Incrementar e decrementar os valores dos campos de entrada
+    // Variável para armazenar o timer
+    var repeatTimer;
+
+    function startIncrementing(field, action) {
+        // Função para atualizar o valor
+        function increment() {
+            updateValue(field, action);
+        }
+
+        // Define a velocidade com base no campo
+        var time;
+        if (field.name === "estimated_return") {
+            time = 300; // Velocidade mais lenta para 'estimated_return'
+        } else if (field.name === "initial_deposit") {
+            time = 50; // Velocidade mais lenta para 'estimated_return'
+        } else {
+            time = 200; // Velocidade padrão para outros campos
+        }
+
+        // Inicia o timer
+        //increment();
+        repeatTimer = setInterval(increment, time);
+    }
+
+    function stopIncrementing() {
+        clearInterval(repeatTimer);
+    }
+
+    // Adiciona eventos aos botões
+    //var buttons = document.querySelectorAll('[data-counter]');
+    buttons.forEach(function(button) {
+        button.addEventListener('mousedown', function() {
+            var field = document.querySelector('[name="' + this.dataset.field + '"]');
+            var action = this.dataset.counter;
+            startIncrementing(field, action);
+        });
+
+        // Para incrementar tanto no mouseup quanto ao sair do botão
+        button.addEventListener('mouseup', stopIncrementing);
+        button.addEventListener('mouseleave', stopIncrementing);
+    });
+
 
 })();

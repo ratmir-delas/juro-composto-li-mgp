@@ -11,19 +11,20 @@
 <body>
 
 <div class="container">
-    <!-- Área principal do formulário -->
+    <!-- Área principal do formulário de parâmetros -->
     <div class="row">
+        <!-- Seção de formulário -->
         <div class="col-md-6">
             <!-- Grupo de formulário para o depósito inicial -->
             <div class="form-group">
-                <label for="initial_deposit">Initial Deposit</label>
+                <label for="initial_deposit">Depósito Inicial</label>
                 <div class="row">
                     <!-- Input com botões para aumentar ou diminuir o valor -->
                     <div class="input-group col-md-6 col-sm-8">
                         <div class="input-group-prepend">
                             <button class="btn btn-primary" type="button" data-counter="sub" data-field="initial_deposit">&minus;</button>
                         </div>
-                        <input class="form-control text-center" id="initial_deposit" type="text" name="initial_deposit" min="100" max="1000000" step="100" value="$5000" data-value="5000" data-prepend="$">
+                        <input class="form-control text-center" id="initial_deposit" type="text" name="initial_deposit" min="100" max="1000000" step="100" value="5000€" data-value="5000" data-prepend="€">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="button" data-counter="add" data-field="initial_deposit">&plus;</button>
                         </div>
@@ -39,7 +40,7 @@
                         <div class="input-group-prepend">
                             <button class="btn btn-primary" type="button" data-counter="sub" data-field="contribution_amount">&minus;</button>
                         </div>
-                        <input class="form-control text-center" id="contribution_amount" type="text" name="contribution_amount" min="0" max="10000" step="50" value="$100" data-value="100" data-prepend="$">
+                        <input class="form-control text-center" id="contribution_amount" type="text" name="contribution_amount" min="0" max="10000" step="50" value="100€" data-value="100" data-prepend="€">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="button" data-counter="add" data-field="contribution_amount">&plus;</button>
                         </div>
@@ -65,7 +66,7 @@
                         <input class="form-control" id="investment_timespan" type="range" name="investment_timespan" min="2" max="50" step="1" value="5">
                     </div>
                 </div>
-                <span id="investment_timespan_text">5 years</span>
+                <span id="investment_timespan_text">5 anos</span>
             </div>
 
             <!-- Grupo de formulário para a taxa de retorno estimada -->
@@ -104,7 +105,15 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Grupo de formulário para limpar e reinciar -->
+            <div class="form-group row">
+                <div class="input-group col-md-6 col-sm-8">
+                    <button class="btn btn-primary" id="reset">&#x21bb; Reiniciar</button>
+                </div>
+            </div>
         </div>
+
         <!-- Seção para exibir o saldo futuro e gráfico -->
         <div class="col-md-6 text-center">
             <div>Saldo Futuro</div>
