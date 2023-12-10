@@ -1,4 +1,5 @@
 (function () {
+    // Variáveis para armazenar os elementos do DOM
     var initial_deposit = document.querySelector('#initial_deposit'),
         contribution_amount = document.querySelector('#contribution_amount'),
         investment_timespan = document.querySelector('#investment_timespan'),
@@ -6,6 +7,7 @@
         estimated_return = document.querySelector('#estimated_return'),
         future_balance = document.querySelector('#future_balance');
 
+    // Atualiza o valor do campo de entrada
     function updateValue(element, action) {
         var min = parseFloat(element.getAttribute('min')),
             max = parseFloat(element.getAttribute('max')),
@@ -13,6 +15,7 @@
             oldValue = element.dataset.value || element.defaultValue || 0,
             newValue = parseFloat(element.value.replace(/€/, ''));
 
+        // Verifica se o novo valor é um número
         if (isNaN(parseFloat(newValue))) {
             newValue = oldValue;
         } else {
@@ -25,6 +28,12 @@
             newValue = newValue < min ? min : newValue > max ? max : newValue;
 
             // Verificação do valor máximo e acionamento do alerta
+            if (newValue >= max && element.id === 'initial_deposit') {
+                alert('Você alcançou o valor máximo!');
+            }
+            if (newValue >= max && element.id === 'contribution_amount') {
+                alert('Você alcançou o valor máximo!');
+            }
             if (newValue >= max && element.id === 'estimated_return') {
                 alert('Você alcançou o valor máximo!');
             }
@@ -36,13 +45,14 @@
         updateChart();
     }
 
+    // Retorna os dados do gráfico
     function getChartData() {
         var P = parseFloat(initial_deposit.dataset.value), // Principal
-            r = parseFloat(estimated_return.dataset.value / 100), // Annual Interest Rate
-            c = parseFloat(contribution_amount.dataset.value), // Contribution Amount
-            n = parseInt(document.querySelector('[name="compound_period"]:checked').value), // Compound Period
-            n2 = parseInt(document.querySelector('[name="contribution_period"]:checked').value), // Contribution Period
-            t = parseInt(investment_timespan.value), // Investment Time Span
+            r = parseFloat(estimated_return.dataset.value / 100), // Taxa de Juro Anual
+            c = parseFloat(contribution_amount.dataset.value), // Montante de Contribuição
+            n = parseInt(document.querySelector('[name="compound_period"]:checked').value), // Período de Capitalização
+            n2 = parseInt(document.querySelector('[name="contribution_period"]:checked').value), // Período de Contribuição
+            t = parseInt(investment_timespan.value), // Duração do Investimento
             currentYear = (new Date()).getFullYear()
         ;
 
@@ -51,29 +61,32 @@
             labels.push(year);
         }
 
+        // Montante Principal Total
         var principal_dataset = {
-            label: 'Principal Total',
+            label: 'Montante Principal',
             backgroundColor: 'rgb(0, 123, 255)',
             data: []
         };
 
+        // Juro Total
         var interest_dataset = {
-            label: "Juro Total",
+            label: "Juro",
             backgroundColor: 'rgb(23, 162, 184)',
             data: []
         };
 
+        // Calcula o montante principal e o juro para cada ano
         for (var i = 1; i <= t; i++) {
-            var principal = P + ( c * n2 * i ),
+            var principal = P + (c * n2 * i),
                 interest = 0,
                 balance = principal;
 
             if (r) {
                 var x = Math.pow(1 + r / n, n * i),
-                    compound_interest = P * x,
-                    contribution_interest = c * (x - 1) / (r / n2);
-                interest = (compound_interest + contribution_interest - principal).toFixed(0)
-                balance = (compound_interest + contribution_interest).toFixed(0);
+                    juro_composto = P * x,
+                    juro_contribuicao = c * (x - 1) / (r / n2);
+                interest = (juro_composto + juro_contribuicao - principal).toFixed(0)
+                balance = (juro_composto + juro_contribuicao).toFixed(0);
             }
 
             future_balance.innerHTML = balance + '€';
@@ -87,6 +100,7 @@
         }
     }
 
+    // Atualiza o gráfico
     function updateChart() {
         var data = getChartData();
 
@@ -95,7 +109,6 @@
         chart.data.datasets[1].data = data.datasets[1].data;
         chart.update();
     }
-
 
     initial_deposit.addEventListener('change', function () {
         updateValue(this);
@@ -124,6 +137,8 @@
     }
 
     var buttons = document.querySelectorAll('[data-counter]');
+
+    // Adiciona um event listener a cada botão
     for (var i = 0; i < buttons.length; i++) {
         var button = buttons[i];
 
@@ -137,6 +152,7 @@
         });
     }
 
+    // Configuração do gráfico
     var ctx = document.getElementById('myChart').getContext('2d'),
         chart = new Chart(ctx, {
             type: 'bar',
@@ -156,14 +172,14 @@
                 },
                 responsive: true,
                 scales: {
-                    xAxes: [{
+                    x: {
                         stacked: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Year'
+                            labelString: 'Ano'
                         }
-                    }],
-                    yAxes: [{
+                    },
+                    y: {
                         stacked: true,
                         ticks: {
                             callback: function (value) {
@@ -172,16 +188,14 @@
                         },
                         scaleLabel: {
                             display: true,
-                            labelString: 'Balance'
+                            labelString: 'Saldo'
                         }
-                    }]
+                    }
                 }
             }
         });
 
-
-    //////////////////CUSTOM CODE//////////////////////
-
+    //////////////////CÓDIGO PERSONALIZADO//////////////////////
 
     /// Função para redefinir os valores dos campos de entrada para o estado inicial
     function resetValues() {
@@ -197,8 +211,6 @@
 
     // Adiciona um event listener ao botão de reset
     document.getElementById('reset').addEventListener('click', resetValues);
-
-
 
     /// Incrementar e decrementar os valores dos campos de entrada
     // Variável para armazenar o timer
@@ -231,8 +243,8 @@
 
     // Adiciona eventos aos botões
     //var buttons = document.querySelectorAll('[data-counter]');
-    buttons.forEach(function(button) {
-        button.addEventListener('mousedown', function() {
+    buttons.forEach(function (button) {
+        button.addEventListener('mousedown', function () {
             var field = document.querySelector('[name="' + this.dataset.field + '"]');
             var action = this.dataset.counter;
             startIncrementing(field, action);
@@ -242,6 +254,5 @@
         button.addEventListener('mouseup', stopIncrementing);
         button.addEventListener('mouseleave', stopIncrementing);
     });
-
 
 })();
