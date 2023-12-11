@@ -92,6 +92,14 @@ label {
         width: 85%;
         margin: auto;
     }
+
+    #btn-export-csv {
+        margin-bottom: 2em;
+    }
+
+    .container-export {
+        width: 100%;
+    }
 }
 
 /* Telefones em modo paisagem */
@@ -115,7 +123,13 @@ label {
         margin: auto;
     }
 
+    #btn-export-csv {
+        margin-bottom: 2em;
+    }
 
+    .container-export {
+        width: 100%;
+    }
 }
 
 /* Telefones em modo retrato */
@@ -136,5 +150,13 @@ label {
     #sub-container-grafico {
         width: 85%;
         margin: auto;
+    }
+
+    #btn-export-csv {
+        margin-bottom: 2em;
+    }
+
+    .container-export {
+        width: 100%;
     }
 }
