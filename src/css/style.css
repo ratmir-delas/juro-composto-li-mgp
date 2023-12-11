@@ -32,6 +32,15 @@ label {
     margin: auto;
 }
 
+#container-export {
+    width: 85%;
+    margin-top: 2em;
+}
+
+#btn-export-csv {
+    float: right;
+}
+
 /* Responsividade */
 /* Laptop */
 @media screen and (min-device-width: 1024px){

@@ -276,6 +276,12 @@
         var returnRate = document.getElementById('estimated_return').value;
         var finalBalance = document.getElementById('future_balance').textContent;
 
+        // Check for duplicate calculations
+        if (isDuplicateCalculation(duration, initialDeposit, contribution, returnRate)) {
+            alert('Um cálculo com estes valores já existe no histórico!');
+            return;
+        }
+
         var tableBody = document.getElementById('historico-conteudo-tabela-body');
         var newRow = tableBody.insertRow();
         newRow.innerHTML = `
@@ -284,8 +290,7 @@
         <td>${contribution}</td>
         <td>${returnRate}</td>
         <td>${finalBalance}</td>
-        <td><button class="delete-row-btn">Eliminar</button></td>
-    `;
+        <td><button class="delete-row-btn">Eliminar</button></td>`;
 
         newRow.onclick = function() {
             document.getElementById('investment_timespan').value = duration;
@@ -298,8 +303,84 @@
         newRow.querySelector('.delete-row-btn').onclick = function(e) {
             e.stopPropagation();
             tableBody.removeChild(this.parentElement.parentElement);
+            updateHistoryVisibility();
         }
+
+        updateHistoryVisibility();
+        updateChart();
     });
 
+    // Função para atualizar a visibilidade da seção de histórico
+    function updateHistoryVisibility() {
+        var tableBody = document.getElementById('historico-conteudo-tabela-body');
+        var historyContainer = document.getElementById('container-historico');
+        if (tableBody.rows.length > 0) {
+            historyContainer.style.display = 'block';
+        } else {
+            historyContainer.style.display = 'none';
+        }
+    }
+    // Initially hide the history section
+    updateHistoryVisibility();
+
+
+    // Adiciona um event listener ao botão de limpar histórico
+
+
+
+    // Função para exportar o histórico para CSV
+    function exportToCSV() {
+        // Gather input data
+        var inputData = getInputData();
+
+        // Gather chart data using your getChartData function
+        var chartData = getChartData();
+        var csvContent = "data:text/csv;charset=utf-8," + inputData;
+        csvContent += "Year,Principal,Interest\r\n";
+
+        chartData.labels.forEach(function(label, index){
+            var principal = chartData.datasets[0].data[index]; // Assuming 0 is principal
+            var interest = chartData.datasets[1].data[index];  // Assuming 1 is interest
+            csvContent += label + "," + principal + "," + interest + "\r\n";
+        });
+
+        // Trigger CSV download
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "compound_interest_data.csv");
+        document.body.appendChild(link); // Required for FF
+
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Check if a calculation with these values already exists in the history
+    function isDuplicateCalculation(duration, initialDeposit, contribution, returnRate) {
+        var tableBody = document.getElementById('historico-conteudo-tabela-body');
+        for (var i = 0; i < tableBody.rows.length; i++) {
+            var row = tableBody.rows[i];
+            if (row.cells[0].innerText === duration + ' anos' &&
+                row.cells[1].innerText === initialDeposit &&
+                row.cells[2].innerText === contribution &&
+                row.cells[3].innerText === returnRate) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Get input field data
+    function getInputData() {
+        var initialDeposit = document.getElementById('initial_deposit').value;
+        var contribution = document.getElementById('contribution_amount').value;
+        var returnRate = document.getElementById('estimated_return').value;
+        var duration = document.getElementById('investment_timespan').value;
+
+        return `Initial Deposit,${initialDeposit}\r\nContributions,${contribution}\r\nReturn Rate,${returnRate}\r\nDuration,${duration}\r\n\r\n`;
+    }
+
+    // Add this function to a button's click event
+    document.getElementById('btn-export-csv').addEventListener('click', exportToCSV);
 
 })();
