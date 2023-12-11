@@ -204,13 +204,14 @@
         document.getElementById('contribution_amount').value = '100€';
         document.getElementById('estimated_return').value = '5.00%';
         document.getElementById('investment_timespan').value = '5';
+        document.getElementById('compound_period_monthly').checked = true;
         investment_timespan_text.innerHTML = '5 anos';
 
         updateChart(); // Atualiza o gráfico com os valores padrão
     }
 
     // Adiciona um event listener ao botão de reset
-    document.getElementById('reset').addEventListener('click', resetValues);
+    document.getElementById('button-reset').addEventListener('click', resetValues);
 
     /// Incrementar e decrementar os valores dos campos de entrada
     // Variável para armazenar o timer
@@ -249,6 +250,17 @@
             var action = this.dataset.counter;
             startIncrementing(field, action);
         });
+        button.addEventListener('touchstart', function () {
+            var field = document.querySelector('[name="' + this.dataset.field + '"]');
+            var action = this.dataset.counter;
+            startIncrementing(field, action);
+        });
+        button.addEventListener('touchend', function () {
+            var field = document.querySelector('[name="' + this.dataset.field + '"]');
+            var action = this.dataset.counter;
+            stopIncrementing(field, action);
+        });
+
 
         // Para incrementar tanto no mouseup quanto ao sair do botão
         button.addEventListener('mouseup', stopIncrementing);

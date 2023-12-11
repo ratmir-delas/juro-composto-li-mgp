@@ -1,8 +1,117 @@
-.container {
-    margin-top: 60px;
-    width: 75%;
+#button-reset {
+    width: 100%;
 }
 
-button {
-    width: 100%;
+/* Estilização dos rótulos (labels) */
+label {
+    font-weight: bold; /* Negrito */
+    margin-bottom: 5px; /* Espaçamento abaixo do rótulo */
+}
+
+/* Estilização dos elementos de rádio e checkbox */
+.form-check-input {
+    margin-top: 0.3em;
+    margin-left: 0;
+}
+
+.form-check-label {
+    margin-right: 15px; /* Espaçamento à direita do rótulo */
+}
+
+
+/* Responsividade */
+/* Laptop */
+@media screen and (min-device-width: 1024px){
+    #container-calculadora {
+        margin-top: 3em;
+        width: 100%;
+    }
+
+    #container-formulario {
+        width: 40%;
+        display: inline-block;
+        float: left;
+    }
+
+    #sub-container-formulario {
+        width: 50%;
+        margin: auto;
+    }
+
+    #container-grafico {
+        width: 60%;
+        display: inline-block;
+        float: right;
+    }
+
+    #sub-container-grafico {
+        width: 85%;
+    }
+}
+
+/* Tablet */
+@media screen and (min-device-width: 640px) and (max-device-width: 1024px) {
+    #container-formulario {
+        width: 100%;
+        margin-top: 2.5em;
+    }
+
+    #sub-container-formulario {
+        width: 40%;
+        margin: auto;
+    }
+
+    #container-grafico {
+        width: 100%;
+    }
+
+    #sub-container-grafico {
+        width: 85%;
+        margin: auto;
+    }
+}
+
+/* Telefones em modo paisagem */
+@media screen and (max-device-width: 640px) {
+    #container-formulario {
+        width: 100%;
+        margin-top: 2.5em;
+    }
+
+    #sub-container-formulario {
+        width: 50%;
+        margin: auto;
+    }
+
+    #container-grafico {
+        width: 100%;
+    }
+
+    #sub-container-grafico {
+        width: 85%;
+        margin: auto;
+    }
+
+
+}
+
+/* Telefones em modo retrato */
+@media screen and (max-device-width: 480px) {
+    #container-formulario {
+        width: 100%;
+    }
+
+    #sub-container-formulario {
+        width: 80%;
+        margin: auto;
+    }
+
+    #container-grafico {
+        width: 100%;
+    }
+
+    #sub-container-grafico {
+        width: 85%;
+        margin: auto;
+    }
 }
