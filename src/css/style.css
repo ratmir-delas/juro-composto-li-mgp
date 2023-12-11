@@ -1,5 +1,10 @@
-#button-reset {
+.btn-wide {
     width: 100%;
+}
+
+#titulo-calculadora {
+    text-align: center;
+    margin-top: 1em;
 }
 
 /* Estilização dos rótulos (labels) */
@@ -18,11 +23,20 @@ label {
     margin-right: 15px; /* Espaçamento à direita do rótulo */
 }
 
+#container-historico {
+    margin-top: 2em;
+}
+
+#sub-container-historico {
+    width: 85%;
+    margin: auto;
+}
 
 /* Responsividade */
 /* Laptop */
 @media screen and (min-device-width: 1024px){
     #container-calculadora {
+        display: inline-block;
         margin-top: 3em;
         width: 100%;
     }

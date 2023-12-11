@@ -267,4 +267,39 @@
         button.addEventListener('mouseleave', stopIncrementing);
     });
 
+
+    // Adiciona um event listener ao botão de salvar
+    document.getElementById('button-save').addEventListener('click', function() {
+        var duration = document.getElementById('investment_timespan').value;
+        var initialDeposit = document.getElementById('initial_deposit').value;
+        var contribution = document.getElementById('contribution_amount').value;
+        var returnRate = document.getElementById('estimated_return').value;
+        var finalBalance = document.getElementById('future_balance').textContent;
+
+        var tableBody = document.getElementById('historico-conteudo-tabela-body');
+        var newRow = tableBody.insertRow();
+        newRow.innerHTML = `
+        <td>${duration} anos</td>
+        <td>${initialDeposit}</td>
+        <td>${contribution}</td>
+        <td>${returnRate}</td>
+        <td>${finalBalance}</td>
+        <td><button class="delete-row-btn">Eliminar</button></td>
+    `;
+
+        newRow.onclick = function() {
+            document.getElementById('investment_timespan').value = duration;
+            document.getElementById('initial_deposit').value = initialDeposit;
+            document.getElementById('contribution_amount').value = contribution;
+            document.getElementById('estimated_return').value = returnRate;
+            updateChart();
+        }
+
+        newRow.querySelector('.delete-row-btn').onclick = function(e) {
+            e.stopPropagation();
+            tableBody.removeChild(this.parentElement.parentElement);
+        }
+    });
+
+
 })();
